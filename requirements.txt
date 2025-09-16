@@ -1,0 +1,9 @@
+kubernetes
+helm
+helmfile
+pyyaml
+scikit-learn
+sentence-transformers
+faiss-cpu
+openai
+jaccard-index
