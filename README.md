@@ -91,13 +91,14 @@ The vector database stores embeddings and metadata for troubleshooting items (lo
 
 ```mermaid
 flowchart TD
-	A[Extract K8s logs/events] --> B[Index in vector DB (cosine/Jaccard)]
-	B --> C{Similarity >= 0.73?}
-	C -- Yes --> D[Select all above threshold]
-	C -- No --> E[Select top-K]
-	D & E --> F[Submit to LLM]
-	F --> G[Check integrity]
-	G --> H[Return validated answer]
+    A[Extract K8s logs/events] --> B[Index in vector DB (cosine/Jaccard)]
+    B --> C{Similarity >= 0.73?}
+    C -- Yes --> D[Select all above threshold]
+    C -- No --> E[Select top-K]
+    D --> F[Submit to LLM]
+    E --> F
+    F --> G[Check integrity]
+    G --> H[Return validated answer]
 ```
 # k8s-ai-troubleshooting
 
