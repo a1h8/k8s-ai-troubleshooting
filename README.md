@@ -1,3 +1,22 @@
+## Novelty & Entropy Approach
+
+To further improve troubleshooting and reduce hallucinations, the system can leverage novelty and entropy metrics:
+
+- **Novelty:** Measures how different a new log/event/query is compared to existing indexed data. High novelty may indicate a new type of incident or an unknown pattern, which can be flagged for special attention or escalation.
+- **Entropy:** Quantifies the uncertainty or diversity in the retrieved context. High entropy in the top-K results may signal ambiguity or a lack of clear precedent, suggesting the need for broader context or human review.
+
+**How to use:**
+- Compute novelty scores (e.g., 1 - max cosine similarity) for new inputs before submission to the LLM.
+- Calculate entropy over the similarity distribution of top-K results to assess confidence.
+- Use these metrics to:
+	- Prioritize novel or high-entropy cases for expert review
+	- Adapt the LLM prompt (e.g., warn about uncertainty)
+	- Trigger additional data collection or feedback requests
+
+**Benefits:**
+- Detects emerging issues and unknown failure modes
+- Reduces overconfidence in LLM answers when context is ambiguous
+- Supports continuous improvement and risk management in troubleshooting workflows
 
 **Examples:**
 - Add vector store schema and weighting logic
@@ -91,15 +110,35 @@ The vector database stores embeddings and metadata for troubleshooting items (lo
 
 ```mermaid
 flowchart TD
-    A[Extract K8s logs/events] --> B[Index in vector DB (cosine/Jaccard)]
-    B --> C{Similarity >= 0.73?}
-    C -- Yes --> D[Select all above threshold]
-    C -- No --> E[Select top-K]
-    D --> F[Submit to LLM]
-    E --> F
-    F --> G[Check integrity]
-    G --> H[Return validated answer]
+	A[Extract K8s logs/events] --> B["Index in vector DB (cosine/Jaccard)"]
+	A2[Extract Git logs & CI logs (GitHub Actions/GitLab)] --> B
+	B --> C{Similarity >= 0.73?}
+	C -- Yes --> D[Select all above threshold]
+	C -- No --> E[Select top-K]
+	D --> F[Submit to LLM]
+	E --> F
+	F --> G[Check integrity]
+	G --> H[Return validated answer]
+	H --> I[Apply logs/events/actions]
+	I --> J[Runtime tests (TTD)]
+	J --> K[Feedback loop]
+	K --> B
 ```
+# k8s-ai-troubleshooting
+
+## CI/CD Integration & Feedback Loop
+
+This project can leverage Git logs and CI logs (GitHub Actions, GitLab CI) as additional sources for troubleshooting context. These logs are indexed in the vector database and can be used to:
+
+- Correlate code changes with incidents or events
+- Provide richer context to the LLM for root cause analysis
+- Automate the application of logs/events/actions and validate fixes with runtime tests (Test-Driven Debugging, TTD)
+- Continuously improve the troubleshooting workflow with a feedback loop (user or automated feedback)
+
+**Best practices:**
+- Integrate log collection from your CI/CD pipelines
+- Store feedback from runtime tests and users to refine future recommendations
+- Use the feedback loop to retrain or re-index the vector database for better accuracy
 # k8s-ai-troubleshooting
 
 ## Purpose
