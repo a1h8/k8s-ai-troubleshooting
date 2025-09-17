@@ -1,3 +1,21 @@
+## Internal Frameworks, Helm/Helmfile Charts & Dependency Management
+
+### Internal Frameworks
+This project can be extended to support company-specific troubleshooting frameworks, custom resource definitions, or proprietary automation logic. Place reusable modules and framework code in the `src/` or `scripts/` directories, and document their usage in the `docs/` folder.
+
+### Helm/Helmfile Charts
+- Store your Helm charts and Helmfile configurations in the `helm/` directory.
+- Use these charts to deploy, test, or simulate Kubernetes resources as part of the troubleshooting workflow.
+- Document chart dependencies and values in the `docs/` folder for reproducibility.
+
+### Dependency Management
+- Carefully track all Python, Helm, and system dependencies in `requirements.txt` and relevant lock files.
+- For internal or custom packages, use a private PyPI or Helm repository and document access instructions.
+- Regularly update and audit dependencies to avoid security and compatibility issues.
+- Use tools like `pip freeze`, `pipdeptree`, or `helm dependency update` to manage and visualize dependencies.
+
+**Best practice:**
+Always document new dependencies and their purpose in the README or a dedicated `docs/dependencies.md` file. This ensures maintainability and smooth onboarding for new contributors.
 ## Novelty & Entropy Approach
 
 To further improve troubleshooting and reduce hallucinations, the system can leverage novelty and entropy metrics:
